@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d458b1a96f3cd854091228711d9602a3, type: 3}
+  m_Name: BigStuffs
+  m_EditorClassIdentifier: 
+  objectName: SummerStructure
+  seasons: 0
+  objectType: 2
+  prefabs:
+  - {fileID: 4962223851112443088, guid: 372d31140fa703a4dbfe7f1f34bd4a98, type: 3}
+  - {fileID: 2446329296860682998, guid: 320e1716c0bedb84a91c9707981bd279, type: 3}
+  - {fileID: 5617008723372108304, guid: 44239bcf89012c540843eb92d48b4351, type: 3}

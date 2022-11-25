@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0ed000e986261646a4e194259eabe54, type: 3}
+  m_Name: SummerIslandBase_M
+  m_EditorClassIdentifier: 
+  objectName: SummerIslandBase_M
+  Seasons: 0
+  IslandSize: 1
+  Prefabs:
+  - {fileID: 5576121631493562073, guid: a83a85b51cb84bd49b0a57036231ccd8, type: 3}
+  - {fileID: 5576121631493562073, guid: c626c869d7aded747b965541fcb7d36a, type: 3}
