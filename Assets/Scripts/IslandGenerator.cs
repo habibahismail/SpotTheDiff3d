@@ -10,7 +10,7 @@ public class IslandGenerator : MonoBehaviour
 {
     [SerializeField] private GameObject island01;
     [SerializeField] private GameObject island02;
-    [SerializeField] private FloatEventChannelSO islandChangeSizeEventChannel;
+    [SerializeField] private IslandSizeEventChannelSO islandChangeSizeEventChannel;
     [SerializeField] private FloatEventChannelSO spreadValueIslandChangeEC;
 
     private IslandBase islandBase;
@@ -41,6 +41,9 @@ public class IslandGenerator : MonoBehaviour
 
     private void GenerateIsland()
     {
+        island01.transform.rotation = Quaternion.identity;
+        island02.transform.rotation = Quaternion.identity;
+
         chosenIslandBasePrefab = islandBase.ChooseIslandBase();
 
         baseIsland01 = Instantiate(chosenIslandBasePrefab, Vector3.zero, Quaternion.identity);
@@ -57,40 +60,25 @@ public class IslandGenerator : MonoBehaviour
 
         currentIslandSize = islandBase.CurrentIslandBaseSO.IslandSize;
 
-        ChangeCameraDistanceAccordingToIslandSize();
-        PassNewSpawnSpreadValue();
+        islandChangeSizeEventChannel.RaiseEvent(currentIslandSize);
         
     }
 
-    private void ChangeCameraDistanceAccordingToIslandSize()
-    {
-        float _cameraDistance = 35f;
-
-        switch ((int)currentIslandSize)
-        {
-            case 0: _cameraDistance = 50f; break;
-            case 1: _cameraDistance = 35f; break;
-            case 2: _cameraDistance = 20f; break;
-            default: break;
-
-        }
-        
-        islandChangeSizeEventChannel.RaiseEvent(_cameraDistance);
-    }
-
+   /*
     private void PassNewSpawnSpreadValue()
     {
         float spawnSpreadValue = 20f;
 
         switch ((int)currentIslandSize)
         {
-            case 0: spawnSpreadValue = 60f - 6f; break;
-            case 1: spawnSpreadValue = 35f - 4f; break;
-            case 2: spawnSpreadValue = 20f - 2f ; break;
+            case 0: spawnSpreadValue = 60f/2.4f; break;
+            case 1: spawnSpreadValue = 35f/2.4f; break;
+            case 2: spawnSpreadValue = 20f/2.4f; break;
             default: break;
 
         }
 
         spreadValueIslandChangeEC.RaiseEvent(spawnSpreadValue);
     }
+   */
 }

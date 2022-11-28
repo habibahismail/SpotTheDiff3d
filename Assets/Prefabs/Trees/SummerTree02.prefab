@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 6384403990734158845}
   - component: {fileID: 6384403990737583069}
   - component: {fileID: 6384403990736451869}
-  m_Layer: 0
+  - component: {fileID: 1895469000138856060}
+  m_Layer: 8
   m_Name: SummerTree02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1895469000138856060
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384403990734186461}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1209811, y: 11.10481, z: 1.1313746}
+  m_Center: {x: 0.051636603, y: 5.335144, z: 0.042479873}

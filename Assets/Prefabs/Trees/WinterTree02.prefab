@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 6384403990734158845}
   - component: {fileID: 6384403990737583069}
   - component: {fileID: 6384403990736451869}
-  m_Layer: 0
+  - component: {fileID: 6855647380511628134}
+  m_Layer: 8
   m_Name: WinterTree02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &6855647380511628134
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6384403990734186461}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.249404, y: 11.10481, z: 1.0490044}
+  m_Center: {x: 0.011618328, y: 5.335144, z: 0.10159679}

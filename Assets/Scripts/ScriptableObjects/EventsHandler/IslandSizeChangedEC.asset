@@ -9,11 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0ed000e986261646a4e194259eabe54, type: 3}
-  m_Name: AutumnIslandBase_L
+  m_Script: {fileID: 11500000, guid: 8cf6fb51e9ff92846b957485e48f2be8, type: 3}
+  m_Name: IslandSizeChangedEC
   m_EditorClassIdentifier: 
-  objectName: AutumnIslandBase_L
-  Seasons: 2
-  IslandSize: 0
-  Prefabs:
-  - {fileID: 5954140669060586217, guid: bc88fcc110b235144b0e159ac5478134, type: 3}

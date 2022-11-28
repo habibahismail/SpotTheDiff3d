@@ -6,7 +6,7 @@ public class CameraZoom : MonoBehaviour
     [SerializeField] CinemachineVirtualCamera[] virtualCamera = new CinemachineVirtualCamera[2];
     [SerializeField] float sensitivity = 10f;
 
-    [SerializeField] private FloatEventChannelSO islandSizeChangeEventChannel;
+    [SerializeField] private IslandSizeEventChannelSO islandSizeChangeEventChannel;
 
     private CinemachineComponentBase componentBase01;
     private CinemachineComponentBase componentBase02;
@@ -17,7 +17,7 @@ public class CameraZoom : MonoBehaviour
 
     private void Awake()
     {
-        islandSizeChangeEventChannel.OnEventRaised += UpdateCameraDistanceValue;
+        islandSizeChangeEventChannel.OnEventRaised += UpdateNewCameraDistance;
     }
 
     private void Start()
@@ -78,5 +78,21 @@ public class CameraZoom : MonoBehaviour
     {
         (componentBase01 as CinemachineFramingTransposer).m_CameraDistance = newValue;
         (componentBase02 as CinemachineFramingTransposer).m_CameraDistance = newValue;
+    }
+
+    private void UpdateNewCameraDistance(SIZE islandSize)
+    {
+        float _cameraDistance = 35f;
+
+        switch ((int)islandSize)
+        {
+            case 0: _cameraDistance = 50f; break;
+            case 1: _cameraDistance = 35f; break;
+            case 2: _cameraDistance = 20f; break;
+            default: break;
+
+        }
+
+        UpdateCameraDistanceValue(_cameraDistance);
     }
 }

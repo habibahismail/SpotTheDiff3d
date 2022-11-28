@@ -9,31 +9,62 @@ public class ObjectsSpawner : MonoBehaviour
 
     [SerializeField] private FloatEventChannelSO islandCreated;
 
+    [Space]
+    [SerializeField] private Transform spawnerOriginLand01;
+    [SerializeField] private Transform spawnerOriginLand02;
     [SerializeField] private GameObject objectParentLand01;
     [SerializeField] private GameObject objectParentLand02;
     [SerializeField] private LayerMask groundLayer;
 
-    [Space]
-    [SerializeField] private Transform spawnerOriginLand01;
-    [SerializeField] private Transform spawnerOriginLand02;
-
-    [Space]
+    [Header("Object Spread Properties")]
     [SerializeField] private float itemXSpread = 10;
     [SerializeField] private float itemYSpread = 0;
     [SerializeField] private float itemZSpread = 10;
 
-    [Header ("Overlapped Checking")]
+    [Header ("Overlapped Checking Properties")]
     [SerializeField] private float raycastDistance = 100f;
     [SerializeField] private float overlapTestBoxSize = 1f;
     [SerializeField] private LayerMask spawnedObjectLayer;
 
+    [Header("Randomize Scaling Properties")]
+    [SerializeField] private bool scaleUniformly;
+    
+    [Space]
+    [SerializeField] private float uniformScaleMin = .1f;
+    [SerializeField] private float uniformScaleMax = 1f;
+    
+    [Space]
+    [SerializeField] private float xScaleMin = .1f;
+    [SerializeField] private float xScaleMax = 3f;
+    [SerializeField] private float yScaleMin = .1f;
+    [SerializeField] private float yScaleMax = 3f;
+    [SerializeField] private float zScaleMin = .1f;
+    [SerializeField] private float zScaleMax = 3f;
+
+
     private GameObject theObjectToSpawn;
     private Quaternion randYRotation;
+    private Vector3 randObjectScale;
+
+    //temp variable
+    private int spawnedCount = 0;
 
     void Start()
     {
         islandCreated.OnEventRaised += SpawnObjects;
     }
+
+#if UNITY_EDITOR
+    void OnDrawGizmos()
+    {
+        // Draw a yellow wire cube at the transform's position
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(spawnerOriginLand01.position, itemXSpread);
+        Gizmos.DrawWireSphere(spawnerOriginLand02.position, itemXSpread);
+
+    }
+
+#endif
 
     private void SpawnObjects(float spreadValue)
     {
@@ -43,10 +74,14 @@ public class ObjectsSpawner : MonoBehaviour
         DestroyAllInstanceOfObjects();
         theObjectToSpawn = ChooseObjectToSpawn();
 
-        for (int i = 0; i < numItemsToSpawn; i++)
-        {
-            SpawnTheObjects();
-        }
+           
+            for (int i = 0; i < numItemsToSpawn; i++)
+            {
+                SpawnTheObjects();
+                Debug.Log("Spawned Objects = " + spawnedCount);
+            }
+        
+        
     }
 
     private void DestroyAllInstanceOfObjects()
@@ -66,9 +101,11 @@ public class ObjectsSpawner : MonoBehaviour
                 Destroy(objectParentLand02.transform.GetChild(i).gameObject);
             }
         }
+
+        spawnedCount = 0;
     }
 
-    void SpawnTheObjects()
+    private void SpawnTheObjects()
     {
 
         //Generate the position to spawn on each island
@@ -79,6 +116,7 @@ public class ObjectsSpawner : MonoBehaviour
         Vector3 land02SpawnPos = randPosition + spawnerOriginLand02.position;
 
         randYRotation = RandomizeYRotation();
+        randObjectScale = RandomizeObjectScale();
 
         //Spawn on Land 01
         SpawnOnLand(land01SpawnPos, objectParentLand01.transform);
@@ -105,10 +143,12 @@ public class ObjectsSpawner : MonoBehaviour
             if (numberOfCollidersFound == 0)
             {
                 Pick(hit.point, spawnRotation, objectParent);
+                spawnedCount++;
             }
             else
             {
-                Debug.Log("name of collider 0 found " + collidersInsideOverlapBox[0].name);
+               // Debug.Log("name of collider 0 found " + collidersInsideOverlapBox[0].name);
+                
             }
         }
     }
@@ -120,6 +160,7 @@ public class ObjectsSpawner : MonoBehaviour
         
         gO.transform.localRotation = Quaternion.identity;
         gO.transform.localRotation = randYRotation;
+        gO.transform.localScale = randObjectScale;
 
     }
 
@@ -137,5 +178,23 @@ public class ObjectsSpawner : MonoBehaviour
     {
         return Quaternion.Euler(0, Random.Range(0, 360), 0);
         
+    }
+
+    private Vector3 RandomizeObjectScale()
+    {
+        Vector3 randomizedScale = Vector3.one;
+        if (scaleUniformly)
+        {
+            float uniformScale = Random.Range(uniformScaleMin, uniformScaleMax);
+            randomizedScale = new Vector3(uniformScale, uniformScale, uniformScale);
+        }
+        else
+        {
+            randomizedScale = new Vector3(Random.Range(xScaleMin, xScaleMax), Random.Range(yScaleMin, yScaleMax), Random.Range(zScaleMin, zScaleMax));
+        }
+
+        float objectCurrentScale = theObjectToSpawn.transform.localScale.x;
+        
+        return randomizedScale * objectCurrentScale;
     }
 }
