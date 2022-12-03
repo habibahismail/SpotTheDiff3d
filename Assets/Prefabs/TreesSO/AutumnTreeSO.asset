@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AutumnTreeSO
   m_EditorClassIdentifier: 
   ObjectName: AutumnTree
-  Seasons: 2
+  Theme: 2
   ObjectType: 0
   Prefabs:
   - {fileID: 8730493000624226134, guid: aa4968025d5e4254da2ca42d9428f7f8, type: 3}

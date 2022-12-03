@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AutumnIslandBase_L
   m_EditorClassIdentifier: 
   objectName: AutumnIslandBase_L
-  Seasons: 2
+  Theme: 2
   IslandSize: 0
   Prefabs:
   - {fileID: 5954140669060586217, guid: bc88fcc110b235144b0e159ac5478134, type: 3}

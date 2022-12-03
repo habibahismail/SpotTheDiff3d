@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WinterTreeSO
   m_EditorClassIdentifier: 
   ObjectName: WinterTrees
-  Seasons: 3
+  Theme: 3
   ObjectType: 0
   Prefabs:
   - {fileID: 8730493000624226134, guid: c5c0c27b54b6a8448b67914f2788cd09, type: 3}

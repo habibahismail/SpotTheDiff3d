@@ -7,7 +7,7 @@ public class IslandBaseSO : ScriptableObject
     [SerializeField] private string objectName;
 
     public string ObjectName { get { return objectName; } }
-    public SEASONS Seasons;
+    public THEME Theme;
     public SIZE IslandSize;
     public List<GameObject> Prefabs;
 }

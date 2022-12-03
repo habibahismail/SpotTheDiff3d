@@ -2,56 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+[RequireComponent(typeof(RandomizeScaleRotation))]
 public class ObjectsSpawner : MonoBehaviour
 {
     [SerializeField] private List<ObjectsSO> ObjectsSOList;
-    [SerializeField] private int numItemsToSpawn = 10;
+    [SerializeField] protected int numItemsToSpawn = 10;
 
-    [SerializeField] private FloatEventChannelSO islandCreated;
+    [Header("Event Channels")]
+    [SerializeField] private IslandSizeEventChannelSO islandCreated;
+    [SerializeField] private ThemeChangeEventChannelSO themeChanged;
 
     [Space]
-    [SerializeField] private Transform spawnerOriginLand01;
-    [SerializeField] private Transform spawnerOriginLand02;
-    [SerializeField] private GameObject objectParentLand01;
-    [SerializeField] private GameObject objectParentLand02;
+    [SerializeField] protected Transform spawnerOriginLand01;
+    [SerializeField] protected Transform spawnerOriginLand02;
+    [SerializeField] protected GameObject objectParentLand01;
+    [SerializeField] protected GameObject objectParentLand02;
     [SerializeField] private LayerMask groundLayer;
 
     [Header("Object Spread Properties")]
-    [SerializeField] private float itemXSpread = 10;
-    [SerializeField] private float itemYSpread = 0;
-    [SerializeField] private float itemZSpread = 10;
+    [SerializeField] protected float itemXSpread = 10;
+    [SerializeField] protected float itemYSpread = 0;
+    [SerializeField] protected float itemZSpread = 10;
+    [SerializeField] private float itemSpreadDivisor = 2f;
 
     [Header ("Overlapped Checking Properties")]
     [SerializeField] private float raycastDistance = 100f;
     [SerializeField] private float overlapTestBoxSize = 1f;
     [SerializeField] private LayerMask spawnedObjectLayer;
 
-    [Header("Randomize Scaling Properties")]
-    [SerializeField] private bool scaleUniformly;
-    
-    [Space]
-    [SerializeField] private float uniformScaleMin = .1f;
-    [SerializeField] private float uniformScaleMax = 1f;
-    
-    [Space]
-    [SerializeField] private float xScaleMin = .1f;
-    [SerializeField] private float xScaleMax = 3f;
-    [SerializeField] private float yScaleMin = .1f;
-    [SerializeField] private float yScaleMax = 3f;
-    [SerializeField] private float zScaleMin = .1f;
-    [SerializeField] private float zScaleMax = 3f;
-
-
-    private GameObject theObjectToSpawn;
-    private Quaternion randYRotation;
-    private Vector3 randObjectScale;
+    protected GameObject theObjectToSpawn;
+    protected Quaternion randYRotation;
+    protected Vector3 randObjectScale;
+    protected SIZE currentIslandSize;
+    protected THEME currentIslandTheme;
+    protected RandomizeScaleRotation randomizeScaleRotation;
 
     //temp variable
-    private int spawnedCount = 0;
+    protected int spawnedCount = 0;
+    private int attempCount = 0;
+    private readonly int maxAttemp = 5;
 
-    void Start()
+
+    private void Start()
     {
+        randomizeScaleRotation = GetComponent<RandomizeScaleRotation>();
+
+        themeChanged.OnEventRaised += SetCurrentIslandTheme;
         islandCreated.OnEventRaised += SpawnObjects;
+    }
+
+    private void OnDestroy()
+    {
+        themeChanged.OnEventRaised -= SetCurrentIslandTheme;
+        islandCreated.OnEventRaised -= SpawnObjects;
     }
 
 #if UNITY_EDITOR
@@ -66,22 +70,31 @@ public class ObjectsSpawner : MonoBehaviour
 
 #endif
 
-    private void SpawnObjects(float spreadValue)
+    private void SpawnObjects(SIZE islandSize)
     {
+        attempCount = 0;
+        currentIslandSize = islandSize;
+        float spreadValue = SetNewSpreadValue();
+        
         itemXSpread = spreadValue;
         itemZSpread = spreadValue;
 
         DestroyAllInstanceOfObjects();
+
+        Debug.Log("SpawnObjects() - current Island theme: " + currentIslandTheme);
         theObjectToSpawn = ChooseObjectToSpawn();
 
-           
+        while(attempCount < maxAttemp && spawnedCount == 0) {
+
             for (int i = 0; i < numItemsToSpawn; i++)
             {
                 SpawnTheObjects();
-                Debug.Log("Spawned Objects = " + spawnedCount);
             }
-        
-        
+
+            attempCount++;
+            //Debug.Log("Spawned Objects = " + spawnedCount + " | attempCount = " + attempCount);
+        }
+           
     }
 
     private void DestroyAllInstanceOfObjects()
@@ -105,7 +118,7 @@ public class ObjectsSpawner : MonoBehaviour
         spawnedCount = 0;
     }
 
-    private void SpawnTheObjects()
+    virtual protected void SpawnTheObjects()
     {
 
         //Generate the position to spawn on each island
@@ -115,8 +128,10 @@ public class ObjectsSpawner : MonoBehaviour
         Vector3 land01SpawnPos = randPosition + spawnerOriginLand01.position;
         Vector3 land02SpawnPos = randPosition + spawnerOriginLand02.position;
 
-        randYRotation = RandomizeYRotation();
-        randObjectScale = RandomizeObjectScale();
+        randomizeScaleRotation = GetComponent<RandomizeScaleRotation>();
+
+        randYRotation = randomizeScaleRotation.RandomizeYRotation();
+        randObjectScale = randomizeScaleRotation.RandomizeObjectScale(theObjectToSpawn);
 
         //Spawn on Land 01
         SpawnOnLand(land01SpawnPos, objectParentLand01.transform);
@@ -126,7 +141,7 @@ public class ObjectsSpawner : MonoBehaviour
 
     }
 
-    private void SpawnOnLand(Vector3 spawnPos, Transform objectParent)
+    protected void SpawnOnLand(Vector3 spawnPos, Transform objectParent)
     {
 
         RaycastHit hit;
@@ -137,19 +152,24 @@ public class ObjectsSpawner : MonoBehaviour
             Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
 
             Vector3 overlapTestBoxScale = new Vector3(overlapTestBoxSize, overlapTestBoxSize, overlapTestBoxSize);
-            Collider[] collidersInsideOverlapBox = new Collider[1];
-            int numberOfCollidersFound = Physics.OverlapBoxNonAlloc(hit.point, overlapTestBoxScale, collidersInsideOverlapBox, spawnRotation, spawnedObjectLayer);
+            //Collider[] collidersInsideOverlapBox = new Collider[1];
+            //int numberOfCollidersFound = Physics.OverlapBoxNonAlloc(hit.point, overlapTestBoxScale, collidersInsideOverlapBox, spawnRotation, spawnedObjectLayer);
 
-            if (numberOfCollidersFound == 0)
+            //if (numberOfCollidersFound == 0)
+            //{
+            //    Pick(hit.point, spawnRotation, objectParent);
+            //    spawnedCount++;
+            //}
+
+            Collider[] hitColliders = Physics.OverlapBox(hit.point, overlapTestBoxScale, spawnRotation, spawnedObjectLayer);
+
+            if(hitColliders.Length == 0)
             {
                 Pick(hit.point, spawnRotation, objectParent);
                 spawnedCount++;
             }
-            else
-            {
-               // Debug.Log("name of collider 0 found " + collidersInsideOverlapBox[0].name);
-                
-            }
+
+
         }
     }
 
@@ -166,35 +186,51 @@ public class ObjectsSpawner : MonoBehaviour
 
     private GameObject ChooseObjectToSpawn()
     {
-        int index = Random.Range(0, ObjectsSOList.Count);
-        int prefabIndex = Random.Range(0, ObjectsSOList[index].Prefabs.Count);
+        List<ObjectsSO> objectSOtemp = new List<ObjectsSO>();
+        GameObject objectPrefab = null;
 
-        GameObject objectPrefab = ObjectsSOList[index].Prefabs[prefabIndex];
+        for (int i = 0; i < ObjectsSOList.Count; i++)
+        {
+     
+            if (ObjectsSOList[i].Theme.CompareTo(currentIslandTheme) == 0)
+            {
+                objectSOtemp.Add(ObjectsSOList[i]);
+            }
+        }
+
+        if (objectSOtemp.Count != 0)
+        {
+
+            int index = Random.Range(0, objectSOtemp.Count);
+            int prefabIndex = Random.Range(0, objectSOtemp[index].Prefabs.Count);
+
+            objectPrefab = objectSOtemp[index].Prefabs[prefabIndex];
+        
+        }
 
         return objectPrefab;
     }
 
-    private Quaternion RandomizeYRotation()
+
+    private float SetNewSpreadValue()
     {
-        return Quaternion.Euler(0, Random.Range(0, 360), 0);
-        
+        float spawnSpreadValue = 10f;
+
+        switch ((int)currentIslandSize)
+        {
+            case 0: spawnSpreadValue = 60f / itemSpreadDivisor; break;
+            case 1: spawnSpreadValue = 35f / itemSpreadDivisor; break;
+            case 2: spawnSpreadValue = 20f / itemSpreadDivisor; break;
+            default: break;
+
+        }
+
+        return spawnSpreadValue;
+
     }
 
-    private Vector3 RandomizeObjectScale()
+    private void SetCurrentIslandTheme(THEME islandTheme)
     {
-        Vector3 randomizedScale = Vector3.one;
-        if (scaleUniformly)
-        {
-            float uniformScale = Random.Range(uniformScaleMin, uniformScaleMax);
-            randomizedScale = new Vector3(uniformScale, uniformScale, uniformScale);
-        }
-        else
-        {
-            randomizedScale = new Vector3(Random.Range(xScaleMin, xScaleMax), Random.Range(yScaleMin, yScaleMax), Random.Range(zScaleMin, zScaleMax));
-        }
-
-        float objectCurrentScale = theObjectToSpawn.transform.localScale.x;
-        
-        return randomizedScale * objectCurrentScale;
+        currentIslandTheme = islandTheme;
     }
 }

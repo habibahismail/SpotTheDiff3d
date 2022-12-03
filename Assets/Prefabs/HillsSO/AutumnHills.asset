@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d458b1a96f3cd854091228711d9602a3, type: 3}
+  m_Name: AutumnHills
+  m_EditorClassIdentifier: 
+  ObjectName: AutumHills
+  Theme: 2
+  ObjectType: 2
+  Prefabs:
+  - {fileID: 2039257050325811888, guid: 5bd36fc4a7e2b1748be6894865225a51, type: 3}
+  - {fileID: 2787909033050393969, guid: 9ce72680336e98144bbeab4814a070cb, type: 3}
+  - {fileID: 5212349800187845695, guid: 27acdc680b2633546a20f32ff9219e63, type: 3}

@@ -10,9 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d458b1a96f3cd854091228711d9602a3, type: 3}
-  m_Name: Hills
+  m_Name: SummerHills
   m_EditorClassIdentifier: 
-  ObjectName: 
-  Seasons: 0
-  ObjectType: 0
-  Prefabs: []
+  ObjectName: SummerHills
+  Theme: 0
+  ObjectType: 2
+  Prefabs:
+  - {fileID: 2039257050325811888, guid: 7e120dea4562ee44ca16a84989d51b64, type: 3}
+  - {fileID: 2787909033050393969, guid: f0fa9c761d1fcb7448ea375a35678af3, type: 3}
+  - {fileID: 2787909033050393969, guid: c68fdc132cf17b44781e2b6e8c8d7952, type: 3}

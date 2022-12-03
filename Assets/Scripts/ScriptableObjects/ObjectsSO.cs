@@ -5,10 +5,10 @@ using UnityEngine;
 public class ObjectsSO : ScriptableObject
 {
     public string ObjectName;
-    public SEASONS Seasons;
+    public THEME Theme;
     public OBJECT_TYPE ObjectType;
     public List<GameObject> Prefabs;
 }
 
-public enum SEASONS { summer, spring, autumn, winter }
+public enum THEME { summer, spring, autumn, winter, beach, town }
 public enum OBJECT_TYPE { tree, rock, structure, vegetation }

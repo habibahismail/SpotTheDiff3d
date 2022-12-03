@@ -6,6 +6,7 @@ public class Spawner : MonoBehaviour
 {
     [SerializeField] protected List<ObjectsSO> ObjectsSOList;
     [SerializeField] protected IslandSizeEventChannelSO newIslandCreated;
+    [SerializeField] protected ThemeChangeEventChannelSO themeChanged;
 
     [SerializeField] protected Transform spawnerOriginLand01;
     [SerializeField] protected Transform spawnerOriginLand02;
@@ -13,31 +14,43 @@ public class Spawner : MonoBehaviour
     [SerializeField] protected Transform objectParentL2;
     [SerializeField] protected LayerMask groundLayer;
 
-    [Header("Poisson Sampling Attributes")]
-    [SerializeField] protected Vector2 zone = Vector2.one;
-    [SerializeField] protected float radius = 1;
-    [SerializeField] protected int k = 30;
-    [SerializeField] protected float display_radius;
+    [Header("Large Island Poisson Sampling Attributes")]
+    [SerializeField] protected Vector2 zone_L = Vector2.one;
+    [SerializeField] protected float radius_L = 1;
+    [SerializeField] protected int k_L = 30;
+    [SerializeField] protected float displayRadius_L;
+
+    [Header("Medium Island Poisson Sampling Attributes")]
+    [SerializeField] protected Vector2 zone_M = Vector2.one;
+    [SerializeField] protected float radius_M = 1;
+    [SerializeField] protected int k_M = 30;
+    [SerializeField] protected float displayRadius_M;
+
+    [Header("Small Island Poisson Sampling Attributes")]
+    [SerializeField] protected Vector2 zone_S = Vector2.one;
+    [SerializeField] protected float radius_S = 1;
+    [SerializeField] protected int k_S = 30;
+    [SerializeField] protected float displayRadius_S;
 
     [Header("Overlapped Checking Properties")]
-    [SerializeField] private float raycastDistance = 100f;
-    [SerializeField] private float overlapTestBoxSize = 1f;
-    [SerializeField] private LayerMask spawnedObjectLayer;
+    [SerializeField] protected float raycastDistance = 100f;
+    [SerializeField] protected float overlapTestBoxSize = 1f;
+    [SerializeField] protected LayerMask spawnedObjectLayer;
 
     [Header("Randomize Scaling Properties")]
-    [SerializeField] private bool scaleUniformly;
+    [SerializeField] protected bool scaleUniformly;
 
     [Space]
-    [SerializeField] private float uniformScaleMin = .1f;
-    [SerializeField] private float uniformScaleMax = 1f;
+    [SerializeField] protected float uniformScaleMin = .1f;
+    [SerializeField] protected float uniformScaleMax = 1f;
 
     [Space]
-    [SerializeField] private float xScaleMin = .1f;
-    [SerializeField] private float xScaleMax = 3f;
-    [SerializeField] private float yScaleMin = .1f;
-    [SerializeField] private float yScaleMax = 3f;
-    [SerializeField] private float zScaleMin = .1f;
-    [SerializeField] private float zScaleMax = 3f;
+    [SerializeField] protected float xScaleMin = .1f;
+    [SerializeField] protected float xScaleMax = 3f;
+    [SerializeField] protected float yScaleMin = .1f;
+    [SerializeField] protected float yScaleMax = 3f;
+    [SerializeField] protected float zScaleMin = .1f;
+    [SerializeField] protected float zScaleMax = 3f;
 
 
     private List<Vector2> samples;
@@ -53,10 +66,18 @@ public class Spawner : MonoBehaviour
     private Vector3 randObjectScale;
     private Vector3 currentSpawnPoint;
 
+    private Vector2 zone;
+    private float radius;
+    private int k;
+    private float displayRadius;
+
+    protected THEME currentIslandTheme;
+
     private void Start()
     {
         //SpawnObjects();
 
+        themeChanged.OnEventRaised += SetCurrentIslandTheme;
         newIslandCreated.OnEventRaised += SpawnObjects;
      
     }
@@ -148,30 +169,31 @@ public class Spawner : MonoBehaviour
         {
 
             case 0:
-                zone = new Vector2(50, 50);
-                radius = 15f;
-                k = 20;
-                display_radius = 3.8f;
+                zone = zone_L;
+                radius = radius_L;
+                k = k_L;
+                displayRadius = displayRadius_L;
                 break;
 
             case 1:
-                zone = new Vector2(25, 25);
-                radius = 8f;
-                k = 10;
-                display_radius = 3.8f; 
+                zone = zone_M;
+                radius = radius_M;
+                k = k_M;
+                displayRadius = displayRadius_M;
                 break;
 
             case 2:
-                zone = new Vector2(14, 14);
-                radius = 4.2f;
-                k = 10;
-                display_radius = 3.8f;
+                zone = zone_S;
+                radius = radius_S;
+                k = k_S;
+                displayRadius = displayRadius_S;
                 break;
+
             default:
-                zone = new Vector2(50, 50);
-                radius = 15f;
-                k = 10;
-                display_radius = 3.8f;
+                zone = zone_L;
+                radius = radius_L;
+                k = k_L;
+                displayRadius = displayRadius_L;
                 break;
 
         }
@@ -189,19 +211,22 @@ public class Spawner : MonoBehaviour
 
             Quaternion spawnRotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
 
-            //Vector3 overlapTestBoxScale = new Vector3(overlapTestBoxSize, overlapTestBoxSize, overlapTestBoxSize);
+            Vector3 overlapTestBoxScale = new Vector3(overlapTestBoxSize, overlapTestBoxSize, overlapTestBoxSize);
             //Collider[] collidersInsideOverlapBox = new Collider[1];
             //int numberOfCollidersFound = Physics.OverlapBoxNonAlloc(hit.point, overlapTestBoxScale, collidersInsideOverlapBox, spawnRotation, spawnedObjectLayer);
 
-            //if (numberOfCollidersFound == 0 )
+            //if (numberOfCollidersFound == 0)
             //{
-                Pick(hit.point, spawnRotation, objectParent);
+            //    Pick(hit.point, spawnRotation, objectParent);
             //}
-            //else
-            //{
-            //    // Debug.Log("name of collider 0 found " + collidersInsideOverlapBox[0].name);
+           
 
-            //}
+            Collider[] hitColliders = Physics.OverlapBox(hit.point, overlapTestBoxScale, spawnRotation, spawnedObjectLayer);
+
+            if (hitColliders.Length == 0)
+            {
+                Pick(hit.point, spawnRotation, objectParent);
+            }
         }
     } 
 
@@ -218,10 +243,27 @@ public class Spawner : MonoBehaviour
 
     private GameObject ChooseObjectToSpawn()
     {
-        int index = Random.Range(0, ObjectsSOList.Count);
-        int prefabIndex = Random.Range(0, ObjectsSOList[index].Prefabs.Count);
+        List<ObjectsSO> objectSOtemp = new List<ObjectsSO>();
+        GameObject objectPrefab = null;
 
-        GameObject objectPrefab = ObjectsSOList[index].Prefabs[prefabIndex];
+        for (int i = 0; i < ObjectsSOList.Count; i++)
+        {
+
+            if (ObjectsSOList[i].Theme.CompareTo(currentIslandTheme) == 0)
+            {
+                objectSOtemp.Add(ObjectsSOList[i]);
+            }
+        }
+
+        if (objectSOtemp.Count != 0)
+        {
+
+            int index = Random.Range(0, objectSOtemp.Count-1);
+            int prefabIndex = Random.Range(0, objectSOtemp[index].Prefabs.Count);
+
+            objectPrefab = objectSOtemp[index].Prefabs[prefabIndex];
+
+        }
 
         return objectPrefab;
     }
@@ -251,13 +293,15 @@ public class Spawner : MonoBehaviour
         return randomizedScale * objectCurrentScale;
     }
 
-    private void OnDrawGizmosSelected()
+    private void SetCurrentIslandTheme(THEME islandTheme)
+    {
+        currentIslandTheme = islandTheme;
+    }
+
+    private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube((new Vector3(zone.x, 0, zone.y) / 2) + transform.position, new Vector3(zone.x, 0, zone.y));
-
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawSphere(currentSpawnPoint, 1f);
+        Gizmos.DrawWireCube((new Vector3(zone_L.x, 0, zone_L.y) / 2) + transform.position, new Vector3(zone_L.x, 0, zone_L.y));
 
     }
 

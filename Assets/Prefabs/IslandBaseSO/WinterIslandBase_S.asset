@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: WinterIslandBase_S
   m_EditorClassIdentifier: 
   objectName: WinterIslandBase_S
-  Seasons: 3
+  Theme: 3
   IslandSize: 2
   Prefabs:
   - {fileID: 7834275675543702238, guid: e6d0a894790ab5d4caaac2732e3dc1f3, type: 3}

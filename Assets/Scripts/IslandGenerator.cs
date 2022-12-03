@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// This class will handle all the works to generate the island.
+/// This class is to create the base island.
 /// </summary>
 
 public class IslandGenerator : MonoBehaviour
 {
     [SerializeField] private GameObject island01;
     [SerializeField] private GameObject island02;
+
+    [Header("Event Channels")]
     [SerializeField] private IslandSizeEventChannelSO islandChangeSizeEventChannel;
+    [SerializeField] private ThemeChangeEventChannelSO themeChangeEventChannel;
     [SerializeField] private FloatEventChannelSO spreadValueIslandChangeEC;
 
     private IslandBase islandBase;
@@ -19,12 +22,14 @@ public class IslandGenerator : MonoBehaviour
     private GameObject baseIsland01;
     private GameObject baseIsland02;
     private SIZE currentIslandSize;
+    private THEME currentIslandTheme;
 
 
     private void Start()
     {
         islandBase = GetComponent<IslandBase>();
         GenerateIsland();
+        RotateIslandTo45deg();
         
     }
 
@@ -36,6 +41,7 @@ public class IslandGenerator : MonoBehaviour
             Destroy(baseIsland02);
 
             GenerateIsland();
+            RotateIslandTo45deg();
         }
     }
 
@@ -45,6 +51,8 @@ public class IslandGenerator : MonoBehaviour
         island02.transform.rotation = Quaternion.identity;
 
         chosenIslandBasePrefab = islandBase.ChooseIslandBase();
+        currentIslandSize = islandBase.CurrentIslandBaseSO.IslandSize;
+        currentIslandTheme = islandBase.CurrentIslandBaseSO.Theme;
 
         baseIsland01 = Instantiate(chosenIslandBasePrefab, Vector3.zero, Quaternion.identity);
         baseIsland02 = Instantiate(chosenIslandBasePrefab, Vector3.zero, Quaternion.identity);
@@ -58,27 +66,18 @@ public class IslandGenerator : MonoBehaviour
         baseIsland01.transform.localRotation = Quaternion.identity;
         baseIsland02.transform.localRotation = Quaternion.identity;
 
-        currentIslandSize = islandBase.CurrentIslandBaseSO.IslandSize;
-
+        themeChangeEventChannel.RaiseEvent(currentIslandTheme);
         islandChangeSizeEventChannel.RaiseEvent(currentIslandSize);
+        
         
     }
 
-   /*
-    private void PassNewSpawnSpreadValue()
+    private void RotateIslandTo45deg()
     {
-        float spawnSpreadValue = 20f;
+        island01.transform.rotation = Quaternion.Euler(0f, 45f, 0f);
+        island02.transform.rotation = Quaternion.Euler(0f, 45f, 0f);
 
-        switch ((int)currentIslandSize)
-        {
-            case 0: spawnSpreadValue = 60f/2.4f; break;
-            case 1: spawnSpreadValue = 35f/2.4f; break;
-            case 2: spawnSpreadValue = 20f/2.4f; break;
-            default: break;
-
-        }
-
-        spreadValueIslandChangeEC.RaiseEvent(spawnSpreadValue);
     }
-   */
+
+    
 }

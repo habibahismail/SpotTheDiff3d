@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SummerIslandBase_S
   m_EditorClassIdentifier: 
   objectName: SummerIslandBase_S
-  Seasons: 0
+  Theme: 0
   IslandSize: 2
   Prefabs:
-  - {fileID: 7834275675543702238, guid: 71d612cd331eb334c914965e78d363a3, type: 3}
+  - {fileID: 3679523091476554909, guid: ce7dd8ab0433ed546a25e51acd86c794, type: 3}

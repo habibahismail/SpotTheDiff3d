@@ -95,4 +95,5 @@ public class CameraZoom : MonoBehaviour
 
         UpdateCameraDistanceValue(_cameraDistance);
     }
+
 }
