@@ -8,9 +8,9 @@ using UnityEngine.Events;
 [CreateAssetMenu(fileName = "New Island Size Event Channel", menuName = "Events/Island Size Changed Event")]
 public class IslandSizeEventChannelSO : ScriptableObject
 {
-    public UnityAction<SIZE> OnEventRaised;
+    public UnityAction<Size> OnEventRaised;
 
-    public void RaiseEvent(SIZE islandSize)
+    public void RaiseEvent(Size islandSize)
     {
         OnEventRaised?.Invoke(islandSize);
     }

@@ -7,9 +7,10 @@ public class IslandBaseSO : ScriptableObject
     [SerializeField] private string objectName;
 
     public string ObjectName { get { return objectName; } }
-    public THEME Theme;
-    public SIZE IslandSize;
+    public Theme IslandTheme;
+    public Size IslandSize;
     public List<GameObject> Prefabs;
 }
 
-public enum SIZE { Large, Medium, Small }
+public enum Size { LARGE, MEDIUM, SMALL }
+public enum Theme { SUMMER, SPRING, AUTUMN, WINTER }

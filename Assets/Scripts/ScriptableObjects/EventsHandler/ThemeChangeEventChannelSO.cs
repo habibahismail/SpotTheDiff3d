@@ -8,9 +8,9 @@ using UnityEngine.Events;
 [CreateAssetMenu(fileName = "New ThemeChange Event Channel", menuName = "Events/Theme Changed Event")]
 public class ThemeChangeEventChannelSO : ScriptableObject
 {
-    public UnityAction<THEME> OnEventRaised;
+    public UnityAction<Theme> OnEventRaised;
 
-    public void RaiseEvent(THEME theme)
+    public void RaiseEvent(Theme theme)
     {
         OnEventRaised?.Invoke(theme);
     }

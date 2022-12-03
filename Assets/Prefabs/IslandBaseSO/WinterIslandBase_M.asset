@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: WinterIslandBase_M
   m_EditorClassIdentifier: 
   objectName: WinterIslandBase_M
-  Theme: 3
+  IslandTheme: 3
   IslandSize: 1
   Prefabs:
-  - {fileID: 5576121631493562073, guid: c4b3386f02794af4f8ce79527aa97fd3, type: 3}
-  - {fileID: 5576121631493562073, guid: 55649e226f228e64e909368f04825523, type: 3}
+  - {fileID: 6346498136680518412, guid: e3a15ff59e0c33a47a56291980c9947c, type: 3}

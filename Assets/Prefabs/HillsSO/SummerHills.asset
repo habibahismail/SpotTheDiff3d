@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: SummerHills
   m_EditorClassIdentifier: 
   ObjectName: SummerHills
-  Theme: 0
-  ObjectType: 2
+  IslandTheme: 0
+  ObjectType: 1
   Prefabs:
   - {fileID: 2039257050325811888, guid: 7e120dea4562ee44ca16a84989d51b64, type: 3}
   - {fileID: 2787909033050393969, guid: f0fa9c761d1fcb7448ea375a35678af3, type: 3}

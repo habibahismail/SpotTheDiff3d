@@ -5,10 +5,11 @@ using UnityEngine;
 public class ObjectsSO : ScriptableObject
 {
     public string ObjectName;
-    public THEME Theme;
-    public OBJECT_TYPE ObjectType;
+    public Theme IslandTheme;
+    public ObjectType ObjectType;
     public List<GameObject> Prefabs;
 }
 
-public enum THEME { summer, spring, autumn, winter, beach, town }
-public enum OBJECT_TYPE { tree, rock, structure, vegetation }
+public enum ObjectType { ANY, BIG_TYPE, MED_TYPE }
+
+

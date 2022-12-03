@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d458b1a96f3cd854091228711d9602a3, type: 3}
+  m_Name: WinterHills
+  m_EditorClassIdentifier: 
+  ObjectName: WinterHills
+  IslandTheme: 3
+  ObjectType: 1
+  Prefabs:
+  - {fileID: 2039257050325811888, guid: 39d8fee1d527f284bae295696d577f67, type: 3}
+  - {fileID: 2787909033050393969, guid: 44fb40356d6ba584b91c35f299fef200, type: 3}
+  - {fileID: 2787909033050393969, guid: aedae0c207a099b40896329684336133, type: 3}

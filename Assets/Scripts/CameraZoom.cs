@@ -80,7 +80,7 @@ public class CameraZoom : MonoBehaviour
         (componentBase02 as CinemachineFramingTransposer).m_CameraDistance = newValue;
     }
 
-    private void UpdateNewCameraDistance(SIZE islandSize)
+    private void UpdateNewCameraDistance(Size islandSize)
     {
         float _cameraDistance = 35f;
 

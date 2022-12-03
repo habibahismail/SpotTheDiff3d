@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d458b1a96f3cd854091228711d9602a3, type: 3}
+  m_Name: SummerMedStuffsSO
+  m_EditorClassIdentifier: 
+  ObjectName: SummerMedStuffs
+  IslandTheme: 0
+  ObjectType: 2
+  Prefabs:
+  - {fileID: 8002101588865007751, guid: 7954f5f5ae8249f42b31f66933a1c56e, type: 3}
+  - {fileID: 4087215965730543721, guid: 50f5752a7a8fb064bb3ab4fe72f35180, type: 3}

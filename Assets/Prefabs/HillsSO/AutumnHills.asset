@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: AutumnHills
   m_EditorClassIdentifier: 
   ObjectName: AutumHills
-  Theme: 2
-  ObjectType: 2
+  IslandTheme: 2
+  ObjectType: 1
   Prefabs:
   - {fileID: 2039257050325811888, guid: 5bd36fc4a7e2b1748be6894865225a51, type: 3}
   - {fileID: 2787909033050393969, guid: 9ce72680336e98144bbeab4814a070cb, type: 3}
